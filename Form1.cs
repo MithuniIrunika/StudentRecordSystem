@@ -5,16 +5,24 @@ namespace StudentRecordSystem
 {
     public partial class Form1 : Form
     {
-        private readonly BindingList<Student> students = new();
+        // Holds the records displayed in the DataGridView.
+        private readonly BindingList<Student> students =
+            new();
+
+        // Provides database operations without exposing SQLite
+        // commands directly to the Windows Form.
         private readonly IStudentRepository repository;
 
         public Form1()
         {
             InitializeComponent();
 
+            // Store the database in the user's local application
+            // folder so records remain after rebuilding the project.
             string applicationFolder = Path.Combine(
                 Environment.GetFolderPath(
-                    Environment.SpecialFolder.LocalApplicationData),
+                    Environment.SpecialFolder
+                        .LocalApplicationData),
                 "StudentRecordSystem");
 
             Directory.CreateDirectory(applicationFolder);
@@ -23,7 +31,8 @@ namespace StudentRecordSystem
                 applicationFolder,
                 "studentrecords.db");
 
-            repository = new StudentRepository(databasePath);
+            repository =
+                new StudentRepository(databasePath);
 
             ConfigureStudentGrid();
 
@@ -38,6 +47,8 @@ namespace StudentRecordSystem
             }
         }
 
+        // Connects the DataGridView to the display list and
+        // prevents users from editing database records directly.
         private void ConfigureStudentGrid()
         {
             dgvStudents.AutoGenerateColumns = true;
@@ -54,6 +65,8 @@ namespace StudentRecordSystem
                 DataGridViewSelectionMode.FullRowSelect;
         }
 
+        // Refreshes the DataGridView using all records or
+        // a supplied collection of search results.
         private void LoadStudents(
             IEnumerable<Student>? records = null)
         {
@@ -68,6 +81,7 @@ namespace StudentRecordSystem
             }
         }
 
+        // Validates the form input and creates a Student object.
         private Student ReadStudentFromInputs()
         {
             if (!int.TryParse(
@@ -98,11 +112,13 @@ namespace StudentRecordSystem
                 Course = txtCourse.Text.Trim()
             };
 
+            // UpdateWam performs the range validation.
             student.UpdateWam(numWam.Value);
 
             return student;
         }
 
+        // Adds a validated student record to SQLite.
         private void btnAddStudent_Click(
             object sender,
             EventArgs e)
@@ -125,6 +141,7 @@ namespace StudentRecordSystem
                 }
 
                 repository.Add(student);
+
                 LoadStudents();
                 ClearInputs();
 
@@ -141,6 +158,8 @@ namespace StudentRecordSystem
             }
         }
 
+        // Displays records that contain the entered ID,
+        // student name or course.
         private void btnSearch_Click(
             object sender,
             EventArgs e)
@@ -151,7 +170,8 @@ namespace StudentRecordSystem
             if (searchText.Length == 0)
             {
                 ShowValidationError(
-                    "Enter a student ID, name or course to search.");
+                    "Enter a student ID, name or course "
+                    + "to search.");
 
                 txtSearch.Focus();
                 return;
@@ -167,7 +187,8 @@ namespace StudentRecordSystem
                 if (results.Count == 0)
                 {
                     ShowInformation(
-                        "No matching student records were found.");
+                        "No matching student records "
+                        + "were found.");
                 }
             }
             catch (SqliteException exception)
@@ -176,6 +197,7 @@ namespace StudentRecordSystem
             }
         }
 
+        // Clears the search and reloads every record.
         private void btnShowAll_Click(
             object sender,
             EventArgs e)
@@ -191,6 +213,7 @@ namespace StudentRecordSystem
             }
         }
 
+        // Updates the student with the ID entered in the form.
         private void btnUpdate_Click(
             object sender,
             EventArgs e)
@@ -206,7 +229,8 @@ namespace StudentRecordSystem
                 if (!updated)
                 {
                     ShowValidationError(
-                        "No student exists with this student ID.");
+                        "No student exists with this "
+                        + "student ID.");
 
                     return;
                 }
@@ -227,6 +251,7 @@ namespace StudentRecordSystem
             }
         }
 
+        // Requests confirmation before deleting a record.
         private void btnDelete_Click(
             object sender,
             EventArgs e)
@@ -262,7 +287,8 @@ namespace StudentRecordSystem
                 if (!deleted)
                 {
                     ShowValidationError(
-                        "The selected student no longer exists.");
+                        "The selected student no longer "
+                        + "exists.");
 
                     return;
                 }
@@ -279,6 +305,8 @@ namespace StudentRecordSystem
             }
         }
 
+        // Copies the selected row into the input controls so
+        // the record can be updated or deleted.
         private void dgvStudents_SelectionChanged(
             object sender,
             EventArgs e)
@@ -302,6 +330,7 @@ namespace StudentRecordSystem
                 selectedStudent.Wam;
         }
 
+        // Places sample values in the controls for demonstration.
         private void btnTestSample_Click(
             object sender,
             EventArgs e)
@@ -329,6 +358,7 @@ namespace StudentRecordSystem
             Close();
         }
 
+        // Clears the student input controls without deleting data.
         private void ClearInputs()
         {
             txtStudentId.Clear();
@@ -360,6 +390,8 @@ namespace StudentRecordSystem
                 MessageBoxIcon.Information);
         }
 
+        // Displays database errors without terminating
+        // the entire application.
         private static void ShowDatabaseError(
             SqliteException exception)
         {
@@ -373,11 +405,13 @@ namespace StudentRecordSystem
                 MessageBoxIcon.Error);
         }
 
+        // This method remains because the original Designer
+        // connected the title label's Click event to it.
         private void lblTitle_Click(
             object sender,
             EventArgs e)
         {
-            // No action is required when the title is clicked.
+            // No action is required.
         }
     }
 }

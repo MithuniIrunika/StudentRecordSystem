@@ -1,5 +1,6 @@
 ﻿namespace StudentRecordSystem
 {
+    // Defines the database operations required by the application.
     public interface IStudentRepository
     {
         void InitializeDatabase();
