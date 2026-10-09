@@ -42,6 +42,12 @@
             btnClear = new Button();
             btnExit = new Button();
             dgvStudents = new DataGridView();
+            lblSearch = new Label();
+            txtSearch = new TextBox();
+            btnSearch = new Button();
+            btnShowAll = new Button();
+            btnUpdate = new Button();
+            btnDelete = new Button();
             ((System.ComponentModel.ISupportInitialize)numWam).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvStudents).BeginInit();
             SuspendLayout();
@@ -126,7 +132,7 @@
             // 
             btnAddStudent.Location = new Point(28, 361);
             btnAddStudent.Name = "btnAddStudent";
-            btnAddStudent.Size = new Size(110, 29);
+            btnAddStudent.Size = new Size(100, 35);
             btnAddStudent.TabIndex = 9;
             btnAddStudent.Text = "Add Student";
             btnAddStudent.UseVisualStyleBackColor = true;
@@ -134,9 +140,9 @@
             // 
             // btnTestSample
             // 
-            btnTestSample.Location = new Point(171, 361);
+            btnTestSample.Location = new Point(397, 361);
             btnTestSample.Name = "btnTestSample";
-            btnTestSample.Size = new Size(111, 29);
+            btnTestSample.Size = new Size(100, 35);
             btnTestSample.TabIndex = 10;
             btnTestSample.Text = "Test Sample";
             btnTestSample.UseVisualStyleBackColor = true;
@@ -144,9 +150,9 @@
             // 
             // btnClear
             // 
-            btnClear.Location = new Point(326, 361);
+            btnClear.Location = new Point(516, 361);
             btnClear.Name = "btnClear";
-            btnClear.Size = new Size(94, 29);
+            btnClear.Size = new Size(100, 35);
             btnClear.TabIndex = 11;
             btnClear.Text = "Clear";
             btnClear.UseVisualStyleBackColor = true;
@@ -154,9 +160,9 @@
             // 
             // btnExit
             // 
-            btnExit.Location = new Point(463, 361);
+            btnExit.Location = new Point(636, 361);
             btnExit.Name = "btnExit";
-            btnExit.Size = new Size(94, 29);
+            btnExit.Size = new Size(100, 35);
             btnExit.TabIndex = 12;
             btnExit.Text = "Exit";
             btnExit.UseVisualStyleBackColor = true;
@@ -168,7 +174,7 @@
             dgvStudents.AllowUserToDeleteRows = false;
             dgvStudents.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvStudents.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvStudents.Location = new Point(28, 415);
+            dgvStudents.Location = new Point(28, 502);
             dgvStudents.MultiSelect = false;
             dgvStudents.Name = "dgvStudents";
             dgvStudents.ReadOnly = true;
@@ -176,12 +182,75 @@
             dgvStudents.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvStudents.Size = new Size(774, 188);
             dgvStudents.TabIndex = 13;
+            dgvStudents.SelectionChanged += dgvStudents_SelectionChanged;
+            // 
+            // lblSearch
+            // 
+            lblSearch.AutoSize = true;
+            lblSearch.Location = new Point(56, 419);
+            lblSearch.Name = "lblSearch";
+            lblSearch.Size = new Size(204, 20);
+            lblSearch.TabIndex = 14;
+            lblSearch.Text = "Search by ID, name or course:";
+            // 
+            // txtSearch
+            // 
+            txtSearch.Location = new Point(56, 457);
+            txtSearch.Name = "txtSearch";
+            txtSearch.Size = new Size(260, 27);
+            txtSearch.TabIndex = 15;
+            // 
+            // btnSearch
+            // 
+            btnSearch.Location = new Point(341, 453);
+            btnSearch.Name = "btnSearch";
+            btnSearch.Size = new Size(100, 35);
+            btnSearch.TabIndex = 16;
+            btnSearch.Text = "Search";
+            btnSearch.UseVisualStyleBackColor = true;
+            btnSearch.Click += btnSearch_Click;
+            // 
+            // btnShowAll
+            // 
+            btnShowAll.Location = new Point(461, 453);
+            btnShowAll.Name = "btnShowAll";
+            btnShowAll.Size = new Size(100, 35);
+            btnShowAll.TabIndex = 17;
+            btnShowAll.Text = "Show All";
+            btnShowAll.UseVisualStyleBackColor = true;
+            btnShowAll.Click += btnShowAll_Click;
+            // 
+            // btnUpdate
+            // 
+            btnUpdate.Location = new Point(151, 361);
+            btnUpdate.Name = "btnUpdate";
+            btnUpdate.Size = new Size(100, 35);
+            btnUpdate.TabIndex = 18;
+            btnUpdate.Text = "Update";
+            btnUpdate.UseVisualStyleBackColor = true;
+            btnUpdate.Click += btnUpdate_Click;
+            // 
+            // btnDelete
+            // 
+            btnDelete.Location = new Point(272, 361);
+            btnDelete.Name = "btnDelete";
+            btnDelete.Size = new Size(100, 35);
+            btnDelete.TabIndex = 19;
+            btnDelete.Text = "Delete";
+            btnDelete.UseVisualStyleBackColor = true;
+            btnDelete.Click += btnDelete_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(982, 616);
+            ClientSize = new Size(982, 711);
+            Controls.Add(btnDelete);
+            Controls.Add(btnUpdate);
+            Controls.Add(btnShowAll);
+            Controls.Add(btnSearch);
+            Controls.Add(txtSearch);
+            Controls.Add(lblSearch);
             Controls.Add(dgvStudents);
             Controls.Add(btnExit);
             Controls.Add(btnClear);
@@ -221,5 +290,11 @@
         private Button btnClear;
         private Button btnExit;
         private DataGridView dgvStudents;
+        private Label lblSearch;
+        private TextBox txtSearch;
+        private Button btnSearch;
+        private Button btnShowAll;
+        private Button btnUpdate;
+        private Button btnDelete;
     }
 }
