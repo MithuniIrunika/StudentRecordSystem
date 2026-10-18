@@ -576,7 +576,6 @@ namespace StudentRecordSystem
                 MessageBoxIcon.Error);
         }
 
-        // This method remains because the original Designer
         // connected the title label's Click event to it.
         private void lblTitle_Click(
             object sender,

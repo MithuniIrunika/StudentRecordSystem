@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             lblTitle = new Label();
             lblStudentId = new Label();
             lblName = new Label();
@@ -56,11 +57,11 @@
             // lblTitle
             // 
             lblTitle.AutoSize = true;
-            lblTitle.Font = new Font("Segoe UI", 15F);
+            lblTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTitle.ForeColor = Color.MidnightBlue;
             lblTitle.Location = new Point(254, 29);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(423, 35);
+            lblTitle.Size = new Size(538, 41);
             lblTitle.TabIndex = 0;
             lblTitle.Text = "Student Record Management System";
             lblTitle.Click += lblTitle_Click;
@@ -186,6 +187,14 @@
             dgvStudents.AllowUserToDeleteRows = false;
             dgvStudents.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvStudents.BackgroundColor = Color.White;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvStudents.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvStudents.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvStudents.Location = new Point(28, 502);
             dgvStudents.MultiSelect = false;
@@ -193,7 +202,7 @@
             dgvStudents.ReadOnly = true;
             dgvStudents.RowHeadersWidth = 51;
             dgvStudents.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvStudents.Size = new Size(774, 188);
+            dgvStudents.Size = new Size(911, 188);
             dgvStudents.TabIndex = 13;
             dgvStudents.SelectionChanged += dgvStudents_SelectionChanged;
             // 
