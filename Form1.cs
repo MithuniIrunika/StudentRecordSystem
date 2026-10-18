@@ -36,14 +36,37 @@ namespace StudentRecordSystem
 
             ConfigureStudentGrid();
 
+            // Event subscriptions added in code. The database is now
+            // loaded in Form1_Load instead of the constructor so that
+            // the window can appear before the data has been read.
+            Load += Form1_Load;
+            btnStatistics.Click += btnStatistics_Click;
+            dgvStudents.CellFormatting += dgvStudents_CellFormatting;
+        }
+
+        // Runs when the form first opens. The async keyword allows
+        // await to be used, so the window stays responsive while the
+        // database is prepared on a background thread.
+        private async void Form1_Load(
+            object? sender,
+            EventArgs e)
+        {
             try
             {
-                repository.InitializeDatabase();
-                LoadStudents();
+                SetBusy(true);
+
+                await Task.Run(
+                    () => repository.InitializeDatabase());
+
+                await LoadStudentsAsync();
             }
             catch (SqliteException exception)
             {
                 ShowDatabaseError(exception);
+            }
+            finally
+            {
+                SetBusy(false);
             }
         }
 
@@ -65,20 +88,33 @@ namespace StudentRecordSystem
                 DataGridViewSelectionMode.FullRowSelect;
         }
 
-        // Refreshes the DataGridView using all records or
-        // a supplied collection of search results.
-        private void LoadStudents(
-            IEnumerable<Student>? records = null)
+        // Reads every student on a background thread using Task.Run.
+        // After await, execution returns to the UI thread, so the
+        // DataGridView can be updated safely.
+        private async Task LoadStudentsAsync()
+        {
+            List<Student> records =
+                await Task.Run(() => repository.GetAll());
+
+            DisplayStudents(records);
+        }
+
+        // Replaces the rows shown in the DataGridView.
+        private void DisplayStudents(
+            IEnumerable<Student> records)
         {
             students.Clear();
 
-            IEnumerable<Student> recordsToDisplay =
-                records ?? repository.GetAll();
-
-            foreach (Student student in recordsToDisplay)
+            foreach (Student student in records)
             {
                 students.Add(student);
             }
+        }
+
+        // Shows a wait cursor while a database operation is running.
+        private void SetBusy(bool isBusy)
+        {
+            UseWaitCursor = isBusy;
         }
 
         // Validates the form input and creates a Student object.
@@ -119,7 +155,7 @@ namespace StudentRecordSystem
         }
 
         // Adds a validated student record to SQLite.
-        private void btnAddStudent_Click(
+        private async void btnAddStudent_Click(
             object sender,
             EventArgs e)
         {
@@ -128,7 +164,12 @@ namespace StudentRecordSystem
                 Student student =
                     ReadStudentFromInputs();
 
-                if (repository.Exists(student.StudentId))
+                SetBusy(true);
+
+                bool exists = await Task.Run(
+                    () => repository.Exists(student.StudentId));
+
+                if (exists)
                 {
                     MessageBox.Show(
                         "This student ID already exists.",
@@ -140,9 +181,9 @@ namespace StudentRecordSystem
                     return;
                 }
 
-                repository.Add(student);
+                await Task.Run(() => repository.Add(student));
 
-                LoadStudents();
+                await LoadStudentsAsync();
                 ClearInputs();
 
                 ShowInformation(
@@ -156,11 +197,15 @@ namespace StudentRecordSystem
             {
                 ShowDatabaseError(exception);
             }
+            finally
+            {
+                SetBusy(false);
+            }
         }
 
         // Displays records that contain the entered ID,
         // student name or course.
-        private void btnSearch_Click(
+        private async void btnSearch_Click(
             object sender,
             EventArgs e)
         {
@@ -179,10 +224,12 @@ namespace StudentRecordSystem
 
             try
             {
-                List<Student> results =
-                    repository.Search(searchText);
+                SetBusy(true);
 
-                LoadStudents(results);
+                List<Student> results = await Task.Run(
+                    () => repository.Search(searchText));
+
+                DisplayStudents(results);
 
                 if (results.Count == 0)
                 {
@@ -195,26 +242,35 @@ namespace StudentRecordSystem
             {
                 ShowDatabaseError(exception);
             }
+            finally
+            {
+                SetBusy(false);
+            }
         }
 
         // Clears the search and reloads every record.
-        private void btnShowAll_Click(
+        private async void btnShowAll_Click(
             object sender,
             EventArgs e)
         {
             try
             {
+                SetBusy(true);
                 txtSearch.Clear();
-                LoadStudents();
+                await LoadStudentsAsync();
             }
             catch (SqliteException exception)
             {
                 ShowDatabaseError(exception);
             }
+            finally
+            {
+                SetBusy(false);
+            }
         }
 
         // Updates the student with the ID entered in the form.
-        private void btnUpdate_Click(
+        private async void btnUpdate_Click(
             object sender,
             EventArgs e)
         {
@@ -223,8 +279,10 @@ namespace StudentRecordSystem
                 Student student =
                     ReadStudentFromInputs();
 
-                bool updated =
-                    repository.Update(student);
+                SetBusy(true);
+
+                bool updated = await Task.Run(
+                    () => repository.Update(student));
 
                 if (!updated)
                 {
@@ -235,7 +293,7 @@ namespace StudentRecordSystem
                     return;
                 }
 
-                LoadStudents();
+                await LoadStudentsAsync();
                 ClearInputs();
 
                 ShowInformation(
@@ -249,10 +307,14 @@ namespace StudentRecordSystem
             {
                 ShowDatabaseError(exception);
             }
+            finally
+            {
+                SetBusy(false);
+            }
         }
 
         // Requests confirmation before deleting a record.
-        private void btnDelete_Click(
+        private async void btnDelete_Click(
             object sender,
             EventArgs e)
         {
@@ -281,8 +343,10 @@ namespace StudentRecordSystem
 
             try
             {
-                bool deleted =
-                    repository.Delete(studentId);
+                SetBusy(true);
+
+                bool deleted = await Task.Run(
+                    () => repository.Delete(studentId));
 
                 if (!deleted)
                 {
@@ -293,7 +357,7 @@ namespace StudentRecordSystem
                     return;
                 }
 
-                LoadStudents();
+                await LoadStudentsAsync();
                 ClearInputs();
 
                 ShowInformation(
@@ -302,6 +366,113 @@ namespace StudentRecordSystem
             catch (SqliteException exception)
             {
                 ShowDatabaseError(exception);
+            }
+            finally
+            {
+                SetBusy(false);
+            }
+        }
+
+        // Uses LINQ to summarise every record in the database.
+        // Lambda expressions such as student => student.Wam tell
+        // each LINQ method which value to use.
+        private async void btnStatistics_Click(
+            object? sender,
+            EventArgs e)
+        {
+            try
+            {
+                SetBusy(true);
+
+                List<Student> allStudents =
+                    await Task.Run(() => repository.GetAll());
+
+                if (allStudents.Count == 0)
+                {
+                    ShowInformation(
+                        "There are no student records "
+                        + "to summarise.");
+
+                    return;
+                }
+
+                decimal averageWam =
+                    allStudents.Average(student => student.Wam);
+
+                int atRiskCount =
+                    allStudents.Count(student => !student.HasPassed);
+
+                // MaxBy returns a nullable result, so ? is used
+                // when reading its properties.
+                Student? topStudent =
+                    allStudents.MaxBy(student => student.Wam);
+
+                // Groups students by course and builds one
+                // summary line for each course.
+                IEnumerable<string> courseSummaries = allStudents
+                    .GroupBy(student => student.Course)
+                    .OrderBy(group => group.Key)
+                    .Select(group =>
+                        $"  {group.Key}: {group.Count()} student(s), "
+                        + $"average WAM {group.Average(student => student.Wam):0.00}");
+
+                string newLine = Environment.NewLine;
+
+                string message =
+                    $"Total students: {allStudents.Count}{newLine}"
+                    + $"Average WAM: {averageWam:0.00}{newLine}"
+                    + $"Students at risk: {atRiskCount}{newLine}"
+                    + $"Highest WAM: {topStudent?.Name} "
+                    + $"({topStudent?.Wam:0.00}){newLine}{newLine}"
+                    + $"By course:{newLine}"
+                    + string.Join(newLine, courseSummaries);
+
+                MessageBox.Show(
+                    message,
+                    "Student Statistics",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+            catch (SqliteException exception)
+            {
+                ShowDatabaseError(exception);
+            }
+            finally
+            {
+                SetBusy(false);
+            }
+        }
+
+        // Runs for every cell before it is drawn. Rows for students
+        // who are at risk are highlighted, and the WAM column is
+        // shown with two decimal places.
+        private void dgvStudents_CellFormatting(
+            object? sender,
+            DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.CellStyle is null)
+            {
+                return;
+            }
+
+            if (dgvStudents.Rows[e.RowIndex].DataBoundItem
+                is not Student student)
+            {
+                return;
+            }
+
+            if (!student.HasPassed)
+            {
+                e.CellStyle.BackColor = Color.MistyRose;
+                e.CellStyle.ForeColor = Color.DarkRed;
+            }
+
+            if (dgvStudents.Columns[e.ColumnIndex].DataPropertyName
+                    == nameof(Student.Wam)
+                && e.Value is decimal wam)
+            {
+                e.Value = wam.ToString("0.00");
+                e.FormattingApplied = true;
             }
         }
 

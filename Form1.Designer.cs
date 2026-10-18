@@ -48,6 +48,7 @@
             btnShowAll = new Button();
             btnUpdate = new Button();
             btnDelete = new Button();
+            btnStatistics = new Button();
             ((System.ComponentModel.ISupportInitialize)numWam).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvStudents).BeginInit();
             SuspendLayout();
@@ -56,6 +57,7 @@
             // 
             lblTitle.AutoSize = true;
             lblTitle.Font = new Font("Segoe UI", 15F);
+            lblTitle.ForeColor = Color.MidnightBlue;
             lblTitle.Location = new Point(254, 29);
             lblTitle.Name = "lblTitle";
             lblTitle.Size = new Size(423, 35);
@@ -110,14 +112,14 @@
             // 
             txtName.Location = new Point(193, 168);
             txtName.Name = "txtName";
-            txtName.Size = new Size(125, 27);
+            txtName.Size = new Size(300, 27);
             txtName.TabIndex = 6;
             // 
             // txtCourse
             // 
             txtCourse.Location = new Point(193, 233);
             txtCourse.Name = "txtCourse";
-            txtCourse.Size = new Size(125, 27);
+            txtCourse.Size = new Size(300, 27);
             txtCourse.TabIndex = 7;
             // 
             // numWam
@@ -130,37 +132,47 @@
             // 
             // btnAddStudent
             // 
+            btnAddStudent.BackColor = Color.SteelBlue;
+            btnAddStudent.FlatStyle = FlatStyle.Flat;
+            btnAddStudent.ForeColor = Color.White;
             btnAddStudent.Location = new Point(28, 361);
             btnAddStudent.Name = "btnAddStudent";
-            btnAddStudent.Size = new Size(100, 35);
+            btnAddStudent.Size = new Size(110, 35);
             btnAddStudent.TabIndex = 9;
             btnAddStudent.Text = "Add Student";
-            btnAddStudent.UseVisualStyleBackColor = true;
+            btnAddStudent.UseVisualStyleBackColor = false;
             btnAddStudent.Click += btnAddStudent_Click;
             // 
             // btnTestSample
             // 
-            btnTestSample.Location = new Point(397, 361);
+            btnTestSample.BackColor = Color.SteelBlue;
+            btnTestSample.FlatStyle = FlatStyle.Flat;
+            btnTestSample.ForeColor = Color.White;
+            btnTestSample.Location = new Point(294, 361);
             btnTestSample.Name = "btnTestSample";
             btnTestSample.Size = new Size(100, 35);
             btnTestSample.TabIndex = 10;
             btnTestSample.Text = "Test Sample";
-            btnTestSample.UseVisualStyleBackColor = true;
+            btnTestSample.UseVisualStyleBackColor = false;
             btnTestSample.Click += btnTestSample_Click;
             // 
             // btnClear
             // 
-            btnClear.Location = new Point(516, 361);
+            btnClear.BackColor = Color.SteelBlue;
+            btnClear.FlatStyle = FlatStyle.Flat;
+            btnClear.ForeColor = Color.White;
+            btnClear.Location = new Point(423, 361);
             btnClear.Name = "btnClear";
             btnClear.Size = new Size(100, 35);
             btnClear.TabIndex = 11;
             btnClear.Text = "Clear";
-            btnClear.UseVisualStyleBackColor = true;
+            btnClear.UseVisualStyleBackColor = false;
             btnClear.Click += btnClear_Click;
             // 
             // btnExit
             // 
-            btnExit.Location = new Point(636, 361);
+            btnExit.ForeColor = Color.Red;
+            btnExit.Location = new Point(839, 707);
             btnExit.Name = "btnExit";
             btnExit.Size = new Size(100, 35);
             btnExit.TabIndex = 12;
@@ -173,6 +185,7 @@
             dgvStudents.AllowUserToAddRows = false;
             dgvStudents.AllowUserToDeleteRows = false;
             dgvStudents.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvStudents.BackgroundColor = Color.White;
             dgvStudents.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvStudents.Location = new Point(28, 502);
             dgvStudents.MultiSelect = false;
@@ -202,49 +215,75 @@
             // 
             // btnSearch
             // 
+            btnSearch.BackColor = Color.DimGray;
+            btnSearch.FlatStyle = FlatStyle.Flat;
+            btnSearch.ForeColor = Color.White;
             btnSearch.Location = new Point(341, 453);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(100, 35);
             btnSearch.TabIndex = 16;
             btnSearch.Text = "Search";
-            btnSearch.UseVisualStyleBackColor = true;
+            btnSearch.UseVisualStyleBackColor = false;
             btnSearch.Click += btnSearch_Click;
             // 
             // btnShowAll
             // 
+            btnShowAll.BackColor = Color.DimGray;
+            btnShowAll.FlatStyle = FlatStyle.Flat;
+            btnShowAll.ForeColor = Color.Transparent;
             btnShowAll.Location = new Point(461, 453);
             btnShowAll.Name = "btnShowAll";
             btnShowAll.Size = new Size(100, 35);
             btnShowAll.TabIndex = 17;
             btnShowAll.Text = "Show All";
-            btnShowAll.UseVisualStyleBackColor = true;
+            btnShowAll.UseVisualStyleBackColor = false;
             btnShowAll.Click += btnShowAll_Click;
             // 
             // btnUpdate
             // 
-            btnUpdate.Location = new Point(151, 361);
+            btnUpdate.BackColor = Color.SteelBlue;
+            btnUpdate.FlatStyle = FlatStyle.Flat;
+            btnUpdate.ForeColor = Color.White;
+            btnUpdate.Location = new Point(170, 361);
             btnUpdate.Name = "btnUpdate";
             btnUpdate.Size = new Size(100, 35);
             btnUpdate.TabIndex = 18;
             btnUpdate.Text = "Update";
-            btnUpdate.UseVisualStyleBackColor = true;
+            btnUpdate.UseVisualStyleBackColor = false;
             btnUpdate.Click += btnUpdate_Click;
             // 
             // btnDelete
             // 
-            btnDelete.Location = new Point(272, 361);
+            btnDelete.BackColor = Color.IndianRed;
+            btnDelete.FlatStyle = FlatStyle.Flat;
+            btnDelete.ForeColor = Color.White;
+            btnDelete.Location = new Point(555, 361);
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(100, 35);
             btnDelete.TabIndex = 19;
             btnDelete.Text = "Delete";
-            btnDelete.UseVisualStyleBackColor = true;
+            btnDelete.UseVisualStyleBackColor = false;
             btnDelete.Click += btnDelete_Click;
+            // 
+            // btnStatistics
+            // 
+            btnStatistics.BackColor = Color.Maroon;
+            btnStatistics.FlatStyle = FlatStyle.Flat;
+            btnStatistics.ForeColor = Color.White;
+            btnStatistics.Location = new Point(362, 707);
+            btnStatistics.Name = "btnStatistics";
+            btnStatistics.Size = new Size(100, 35);
+            btnStatistics.TabIndex = 20;
+            btnStatistics.Text = "Statistics";
+            btnStatistics.UseVisualStyleBackColor = false;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(982, 711);
+            BackColor = Color.AliceBlue;
+            ClientSize = new Size(982, 765);
+            Controls.Add(btnStatistics);
             Controls.Add(btnDelete);
             Controls.Add(btnUpdate);
             Controls.Add(btnShowAll);
@@ -296,5 +335,6 @@
         private Button btnShowAll;
         private Button btnUpdate;
         private Button btnDelete;
+        private Button btnStatistics;
     }
 }
